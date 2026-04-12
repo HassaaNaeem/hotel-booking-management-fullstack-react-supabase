@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Logo from "./Logo";
 import MainNav from "./MainNav";
+import { useCabins } from "../features/cabins/useCabins";
 
 const StyledSidebar = styled.aside`
   background-color: var(--color-grey-0);
@@ -14,6 +15,9 @@ const StyledSidebar = styled.aside`
 `;
 
 function Sidebar() {
+  const { isLoading, cabins } = useCabins(); // it will load cabins data into cache as we load the home page
+  console.log(cabins);
+
   return (
     <StyledSidebar>
       <Logo />
