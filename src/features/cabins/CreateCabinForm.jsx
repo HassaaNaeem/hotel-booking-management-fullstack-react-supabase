@@ -21,35 +21,34 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const { register, handleSubmit, reset, getValues, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
+
   const { errors } = formState; // form validation errors
 
   function onFormSubmit(data) {
-    const image = typeof data.image == "string" ? data.image : data.image[0];
-    if (isEditSession) {
+    const image = typeof data.image === "string" ? data.image : data.image[0];
+
+    if (isEditSession)
       editCabin(
+        { newCabinData: { ...data, image }, id: editId },
         {
-          newCabinData: {
-            ...data,
-            image,
+          onSuccess: (data) => {
+            reset();
           },
-          id: editId,
-        },
-        {
-          onSuccess: () => reset(),
         },
       );
-    } else {
+    else
       createCabin(
         { ...data, image: image },
         {
-          onSuccess: (data) => reset(),
+          onSuccess: (data) => {
+            reset();
+          },
         },
       );
-    }
   }
 
   function onError(errors) {
-    console.log(errors);
+    // console.log(errors);
   }
   return (
     <Form onSubmit={handleSubmit(onFormSubmit, onError)}>
@@ -120,7 +119,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           type="number"
           id="description"
           defaultValue=""
-          disbaled={isWorking}
+          // disabled={isWorking}
           {...register("description", {
             required: "This field is required",
           })}

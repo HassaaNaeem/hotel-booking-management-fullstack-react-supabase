@@ -15,8 +15,8 @@ const StyledSidebar = styled.aside`
 `;
 
 function Sidebar() {
-  const { isLoading, cabins } = useCabins(); // it will load cabins data into cache as we load the home page
-  console.log(cabins);
+  // const { isLoading, cabins } = useCabins(); // it will load cabins data into cache as we load the home page
+  // console.log(cabins);
 
   return (
     <StyledSidebar>
