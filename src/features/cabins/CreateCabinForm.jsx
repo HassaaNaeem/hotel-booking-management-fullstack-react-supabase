@@ -1,6 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useCreateCabin } from "./useCreateCabin";
-import { useEditCabin } from "./useEditCabin";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -9,10 +7,12 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
+import { useCreateCabin } from "./useCreateCabin";
+import { useEditCabin } from "./useEditCabin";
+
 function CreateCabinForm({ cabinToEdit = {} }) {
   const { isCreating, createCabin } = useCreateCabin();
   const { isEditing, editCabin } = useEditCabin();
-
   const isWorking = isCreating || isEditing;
 
   const { id: editId, ...editValues } = cabinToEdit;
@@ -21,10 +21,9 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const { register, handleSubmit, reset, getValues, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
+  const { errors } = formState;
 
-  const { errors } = formState; // form validation errors
-
-  function onFormSubmit(data) {
+  function onSubmit(data) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
     if (isEditSession)
@@ -50,8 +49,9 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   function onError(errors) {
     // console.log(errors);
   }
+
   return (
-    <Form onSubmit={handleSubmit(onFormSubmit, onError)}>
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -70,7 +70,6 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           disabled={isWorking}
           {...register("maxCapacity", {
             required: "This field is required",
-
             min: {
               value: 1,
               message: "Capacity should be at least 1",
@@ -83,13 +82,12 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="regularPrice"
-          // disabled={isWorking}
+          disabled={isWorking}
           {...register("regularPrice", {
             required: "This field is required",
-            valueAsNumber: true,
             min: {
-              value: 50,
-              message: "Price should be at least 50",
+              value: 1,
+              message: "Capacity should be at least 1",
             },
           })}
         />
@@ -99,11 +97,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="discount"
+          disabled={isWorking}
           defaultValue={0}
-          // disabled={isWorking}
           {...register("discount", {
             required: "This field is required",
-            valueAsNumber: true,
             validate: (value) =>
               value <= getValues().regularPrice ||
               "Discount should be less than regular price",
@@ -119,7 +116,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           type="number"
           id="description"
           defaultValue=""
-          // disabled={isWorking}
+          disabled={isWorking}
           {...register("description", {
             required: "This field is required",
           })}
@@ -142,7 +139,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           Cancel
         </Button>
         <Button disabled={isWorking}>
-          {isEditSession ? "Edit Cabin" : "Create New Cabin"}
+          {isEditSession ? "Edit cabin" : "Create new cabin"}
         </Button>
       </FormRow>
     </Form>
