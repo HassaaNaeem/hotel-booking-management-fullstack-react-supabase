@@ -49,7 +49,7 @@ const Discount = styled.div`
 function CabinRow({ cabin }) {
   const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteCabin } = useDeleteCabin();
-  // const { isCreatng, createCabin } = useCreateCabin();
+  const { isCreatng, createCabin } = useCreateCabin();
 
   const {
     id: cabinId,
@@ -57,8 +57,20 @@ function CabinRow({ cabin }) {
     maxCapacity,
     regularPrice,
     discount,
+    description,
     image,
   } = cabin;
+
+  const handleDuplicateCabin = () => {
+    createCabin({
+      name: `Copy of ${name}`,
+      maxCapacity,
+      regularPrice,
+      discount,
+      description,
+      image,
+    });
+  };
 
   return (
     <>
@@ -73,9 +85,9 @@ function CabinRow({ cabin }) {
           <span>&mdash;</span>
         )}
         <div>
-          {/* <button onClick={() => createCabin({ ...cabin })}>
+          <button onClick={handleDuplicateCabin}>
             <HiSquare2Stack />
-          </button> */}
+          </button>
           <button onClick={() => setShowForm((show) => !show)}>
             <HiPencil />
           </button>
