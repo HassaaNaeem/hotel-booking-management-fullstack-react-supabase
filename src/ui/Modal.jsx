@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import React from "react";
+import { createPortal } from "react-dom";
+import { HiXMark } from "react-icons/hi2";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -48,3 +51,20 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+function Modal({ children, onClose }) {
+  return createPortal(
+    // it seperates this element from the parent element, if we dont use this, it might get hidden where parent overflow property is set to hidden
+    <Overlay>
+      <StyledModal>
+        <Button onClick={onClose}>
+          <HiXMark></HiXMark>
+        </Button>
+        <div>{children}</div>
+      </StyledModal>
+    </Overlay>,
+    document.body, // not ideal
+  );
+}
+
+export default Modal;
