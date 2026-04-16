@@ -3,6 +3,8 @@ import React, {
   cloneElement,
   createContext,
   useContext,
+  useEffect,
+  useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
@@ -79,11 +81,23 @@ function Open({ children, opens: opensWindowName }) {
 
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
+  const ref = useRef();
+
+  useEffect(() => {
+    function handleClick(e) {
+      if (ref.current && !ref.current.contains(e.target)) close();
+    }
+
+    document.addEventListener("click", handleClick, true); // event in capturing phase and not in bubbling phase
+
+    return () => document.removeEventListener("click", handleClick);
+  }, [close]);
+
   if (name !== openName) return;
   return createPortal(
     // it seperates this element from the parent element, if we dont use this, it might get hidden where parent overflow property is set to hidden
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiXMark></HiXMark>
         </Button>
