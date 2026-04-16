@@ -1,10 +1,5 @@
 import styled from "styled-components";
-import React, {
-  cloneElement,
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import React from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 
@@ -57,44 +52,19 @@ const Button = styled.button`
   }
 `;
 
-const ModalContext = createContext();
-
-function Modal({ children }) {
-  const [openName, setOpenName] = useState("");
-  const close = () => setOpenName("");
-  const open = setOpenName;
-
-  return (
-    <ModalContext.Provider value={{ openName, close, open }}>
-      {children}
-    </ModalContext.Provider>
-  );
-}
-
-function Open({ children, opens: opensWindowName }) {
-  const { open } = useContext(ModalContext);
-
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
-}
-
-function Window({ children, name }) {
-  const { openName, close } = useContext(ModalContext);
-  if (name !== openName) return;
+function Modal({ children, onClose }) {
   return createPortal(
     // it seperates this element from the parent element, if we dont use this, it might get hidden where parent overflow property is set to hidden
     <Overlay>
       <StyledModal>
-        <Button onClick={close}>
+        <Button onClick={onClose}>
           <HiXMark></HiXMark>
         </Button>
-        <div>{cloneElement(children, { onCloseModal: close })}</div>
+        <div>{children}</div>
       </StyledModal>
     </Overlay>,
     document.body, // not ideal
   );
 }
-
-Modal.Open = Open;
-Modal.Window = Window;
 
 export default Modal;
