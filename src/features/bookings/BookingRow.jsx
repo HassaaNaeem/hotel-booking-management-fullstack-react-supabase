@@ -5,7 +5,7 @@ import Tag from "../../ui/Tag";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
-import StyledTable from "../../ui/Table";
+import Table from "../../ui/Table";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -55,8 +55,7 @@ function BookingRow({
   };
 
   return (
-    // <Table.Row>
-    <StyledTable>
+    <Table.Row>
       <Cabin>{cabinName}</Cabin>
 
       <Stacked>
@@ -80,8 +79,7 @@ function BookingRow({
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
-    </StyledTable>
-    // </Table.Row>
+    </Table.Row>
   );
 }
 
