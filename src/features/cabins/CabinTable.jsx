@@ -6,6 +6,7 @@ import Spinner from "../../../../WorldWise-App/src/components/Spinner";
 import { useSearchParams } from "react-router-dom";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
+import Empty from "../../ui/Empty";
 
 const TableHeader = styled.header`
   display: grid;
@@ -29,6 +30,7 @@ function CabinTable() {
   if (isLoading) {
     return <Spinner />;
   }
+  if (!cabins.length) return <Empty resourceName="cabins" />;
 
   // 1) Filter
   const filterValue = searchParams.get("discount") || "all";
@@ -61,7 +63,7 @@ function CabinTable() {
           <div></div>
         </Table.Header>
         <Table.Body
-          data={cabins}
+          data={filteredCabins}
           render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
         />
       </Table>

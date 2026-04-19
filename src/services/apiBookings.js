@@ -2,12 +2,18 @@ import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
 export async function getAllBookings() {
-  const { data, error } = await supabase.from("bookings").select("*");
+  const { data, error } = await supabase
+    .from("bookings")
+    .select(
+      "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)",
+    ); // getting only selected fields, and name from cabins table and fullName, email from guests table
 
   if (error) {
     console.log(error);
     throw new Error("Bookings could not be loaded");
   }
+
+  return data;
 }
 
 export async function getBooking(id) {
