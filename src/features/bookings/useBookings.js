@@ -18,14 +18,15 @@ export function useBookings() {
   const [field, direction] = sortByRow.split("-");
   const sortBy = { field, direction };
 
-  const {
-    isLoading,
-    data: bookings,
-    error,
-  } = useQuery({
-    queryKey: ["bookings", filter, sortBy], // whenever filter changes, react query will refetch the data
-    queryFn: () => getAllBookings({ filter, sortBy }),
+  // PAGINAION
+  const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
+
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["bookings", filter, sortBy, page], // whenever filter changes, react query will refetch the data
+    queryFn: () => getAllBookings({ filter, sortBy, page }),
   });
-  console.log(bookings);
-  return { isLoading, error, bookings };
+  const bookings = data?.data;
+  const count = data?.count;
+
+  return { isLoading, error, bookings, count };
 }
