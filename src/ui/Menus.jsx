@@ -83,6 +83,7 @@ function Menus({ children }) {
 function Toggle({ id }) {
   const { openId, close, open, setPosition } = useContext(MenusContext);
   function handleClick(e) {
+    e.stopPropagation();
     const rect = e.target.closest("button").getBoundingClientRect();
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
@@ -106,7 +107,7 @@ function List({ id, children }) {
       if (ref.current && !ref.current.contains(e.target)) close();
     }
 
-    document.addEventListener("click", handleClick, true); // event in capturing phase and not in bubbling phase
+    document.addEventListener("click", handleClick, false); // event in capturing phase and not in bubbling phase
 
     return () => document.removeEventListener("click", handleClick);
   }, [close]);
