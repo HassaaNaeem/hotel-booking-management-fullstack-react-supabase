@@ -25,6 +25,11 @@ function LoginForm() {
     );
   }
 
+  function handleDemoAccount() {
+    setEmail("jack@example.com");
+    setPassword("12345678");
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       <FormRowVertical label="Email address">
@@ -51,6 +56,17 @@ function LoginForm() {
       <FormRowVertical>
         <Button size="large" disabled={isLoading}>
           {isLoading ? <SpinnerMini /> : "Log in"}
+        </Button>
+      </FormRowVertical>
+      <FormRowVertical>
+        <Button
+          type="button"
+          variation="secondary"
+          size="large"
+          onClick={handleDemoAccount}
+          disabled={isLoading}
+        >
+          Use Demo Account
         </Button>
       </FormRowVertical>
     </Form>
